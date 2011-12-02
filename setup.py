@@ -51,6 +51,6 @@ setup(name='Products.TinyMCE',
         'zope.schema>=3.5.4'
     ] + requires,
     extras_require={
-        'test': ['plone.app.testing', 'unittest2', 'plone.app.dexterity'],
+        'test': ['plone.app.testing', 'unittest2'],
     },
 )
