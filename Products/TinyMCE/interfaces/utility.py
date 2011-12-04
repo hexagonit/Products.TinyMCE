@@ -349,11 +349,6 @@ class ITinyMCELibraries(Interface):
 class ITinyMCEResourceTypes(Interface):
     """This interface defines the resource types properties."""
 
-    link_using_uids = schema.Bool(
-        title=_(u"Link using UIDs"),
-        description=_(u"Links to objects on this site can use unique object ids so that the links remain valid even if the target object is renamed or moved elsewhere on the site."),
-        required=False)
-
     allow_captioned_images = schema.Bool(
         title=_(u"Allow captioned images"),
         description=_(u"Images will be automatically captioned."),

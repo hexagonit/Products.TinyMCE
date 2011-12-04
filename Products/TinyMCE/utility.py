@@ -144,7 +144,8 @@ class TinyMCE(SimpleItem):
     libraries_atd_ignore_strings = FieldProperty(ITinyMCELibraries['libraries_atd_ignore_strings'])
     libraries_atd_service_url = FieldProperty(ITinyMCELibraries['libraries_atd_service_url'])
 
-    link_using_uids = FieldProperty(ITinyMCEResourceTypes['link_using_uids'])
+    # backwards compatibility
+    link_using_uids = True
     allow_captioned_images = FieldProperty(ITinyMCEResourceTypes['allow_captioned_images'])
     rooted = FieldProperty(ITinyMCEResourceTypes['rooted'])
     containsobjects = FieldProperty(ITinyMCEResourceTypes['containsobjects'])
