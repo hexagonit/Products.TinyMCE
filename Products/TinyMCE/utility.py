@@ -159,6 +159,7 @@ class TinyMCE(SimpleItem):
     image_shortcuts = FieldProperty(ITinyMCEContentBrowser['image_shortcuts'])
     num_of_thumb_columns = FieldProperty(ITinyMCEContentBrowser['num_of_thumb_columns'])
     thumbnail_size = FieldProperty(ITinyMCEContentBrowser['thumbnail_size'])
+    enable_external_link_preview = FieldProperty(ITinyMCEContentBrowser['enable_external_link_preview'])
 
     def getImageScales(self, field=None, context=None):
         """Return the image sizes for the drawer"""
@@ -482,6 +483,7 @@ class TinyMCE(SimpleItem):
             'ol': COMMON_ATTRS | set('compact type'.split()),
             'optgroup': COMMON_ATTRS | set('disabled label'.split()),
             'option': COMMON_ATTRS | set('selected disabled label value'.split()),
+            # p needs to be prepended with # to allow empty p tags http://www.tinymce.com/wiki.php/Configuration:valid_elements
             '#p': COMMON_ATTRS | set('align'.split()),
             'param': set('id name value valuetype type'.split()),
             'pre': COMMON_ATTRS | set('width'.split()),
@@ -924,6 +926,7 @@ class TinyMCE(SimpleItem):
         results['image_shortcuts_html'] = []
         results['num_of_thumb_columns'] = self.num_of_thumb_columns
         results['thumbnail_size'] = self.thumbnail_size
+        results['enable_external_link_preview'] = self.enable_external_link_preview
 
         for name in self.link_shortcuts:
             results['link_shortcuts_html'].extend(shortcuts_dict.get(name).render(context))
