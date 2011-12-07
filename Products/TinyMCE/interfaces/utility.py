@@ -415,7 +415,7 @@ class ITinyMCEContentBrowser(Interface):
 
     image_shortcuts = schema.List(
         title=_("Image Shortcuts"),
-        description=_(u"List of shortcuts to appear in image browser for quick navigation."),
+        description=_(u"List of shortcuts to appear in image browser for quick navigation"),
         value_type=schema.Choice(source=shortcuts_vocabulary,),
         default=['Home', 'Current Folder'],
         required=False,
@@ -433,6 +433,12 @@ class ITinyMCEContentBrowser(Interface):
         #description=_(u""),
         values=[2, 4, 8, 16],
         default=4,
+    )
+
+    enable_external_link_preview = schema.Bool(
+        title=_("Enable/Disable external link preview"),
+        description=_(u"Modern browsers allow webpages to block such feature. Some webpages may not be displayed in the preview."),
+        default=True,
     )
 
 
