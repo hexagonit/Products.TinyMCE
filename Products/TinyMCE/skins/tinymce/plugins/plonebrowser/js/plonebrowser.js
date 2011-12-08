@@ -104,6 +104,22 @@ BrowserDialog.prototype.init = function () {
         e.stopPropagation();
         self.checkSearch(e);
     });
+    jq('#clear-btn', document).click(function (e) {
+        e.preventDefault();
+        jq('#searchtext', document).val("");
+        self.checkSearch(e);
+    });
+    jq('#search-btn', document).click(function (e) {
+        e.preventDefault();
+        self.checkSearch(e);
+    });
+    // handle shortcuts button
+    jq("#shortcutsicon", document).click(function(e) {
+        e.preventDefault();
+        jq(this).toggleClass('selected');
+        jq('#shortcutsview', document).toggle();
+    });
+    
     // handle different folder listing view types
     jq('#general_panel .legend a', document).click(function (e) {
         self.editing_existing_image = true;
@@ -121,6 +137,9 @@ BrowserDialog.prototype.init = function () {
     if (this.editor.settings.rooted === true) {
         jq('#home', document).hide();
     }
+    if (!this.editor.settings.enable_external_link_preview) {
+        jq('#preview-column', document).hide();
+    }
 
     // setup UI depending on plugin type
     if (this.is_link_plugin === true) {
@@ -137,15 +156,17 @@ BrowserDialog.prototype.init = function () {
         jq('.legend a', document).removeClass('current');
         jq('#listview', document).addClass('current');
         jq('.legend', document).hide();
+        jq('.action-icons', document).hide();
 
         // setup link buttons acions
         jq('#linktype a', document).click(function (e) {
             e.preventDefault();
-            jq('#linktype_panel p', document).removeClass('current');
-            jq(this, document).parent('p').addClass('current');
+            jq('#linktype_panel div', document).removeClass('current');
+            jq(this, document).parent('div').addClass('current');
             switch (jq(this).attr('href')) {
                 case "#internal":
                     self.displayPanel('browse');
+                    self.getCurrentFolderListing();
                     break;
                 case "#external":
                     self.displayPanel('external');
@@ -158,16 +179,14 @@ BrowserDialog.prototype.init = function () {
                     break;
             }
         });
-        jq('#advanced_options', document).click(function (e) {
-            self.displayPanel('advanced');
-            e.preventDefault();
-        });
         jq('#externalurl', document).keyup(function (e) {
             self.checkExternalURL(this.value);
         });
         jq('#targetlist', document).change(this.setupPopupVisibility);
         jq('#previewexternalurl', document).click(function (e) {
             e.preventDefault();
+            jq('#previewexternal', document).show();
+            jq(this).text('Refresh Preview');
             self.previewExternalURL();
         });
 
@@ -201,6 +220,7 @@ BrowserDialog.prototype.init = function () {
             } else if ((href.indexOf(this.editor.settings.portal_url) === -1) &&
                 ((href.indexOf('http://') === 0) || (href.indexOf('https://') === 0) || (href.indexOf('ftp://') === 0))) {
                 this.checkExternalURL(href);
+                jq('#cssstyle', document).val(selected_node.attr('style'));
                 jq('#linktype a[href=#external]', document).click();
             } else {
                 if (href.indexOf('#') !== -1) {
@@ -241,9 +261,10 @@ BrowserDialog.prototype.init = function () {
 
     } else {
         /* handle image plugin startup */
-        jq('#browseimage_panel h2', document).text(this.labels.label_browseimage);
+        // jq('#browseimage_panel h2', document).text(this.labels.label_browseimage);
         jq('#addimage_panel h2', document).text(this.labels.label_addnewimage);
         jq('#plonebrowser', document).removeClass('link-browser').addClass('image-browser');
+        jq('#linktarget', document).hide();
 
         if (selected_node.get(0).tagName && selected_node.get(0).tagName.toUpperCase() === 'IMG') {
             /** The image dialog was opened to edit an existing image element. **/
@@ -391,7 +412,8 @@ BrowserDialog.prototype.setAnchorAttributes = function (node, link) {
     jq(node)
         .attr('title', jq('#title', document).val())
         .removeClass('internal-link external-link anchor-link mail-link')
-        .addClass(panelname.substr(1, panelname.length) + '-link');
+        .addClass(panelname.substr(1, panelname.length) + '-link')
+        .attr('style', jq('#cssstyle', document).val());
 };
 
 
@@ -562,7 +584,7 @@ BrowserDialog.prototype.insertImage = function () {
         'url': jq('#description_href', document).val() + '/tinymce-setDescription',
         'type': 'POST',
         'data': {
-            'description': encodeURIComponent(jq('#description', document).val())
+            'description': jq('#description', document).val()
         }
     });
 
@@ -576,6 +598,11 @@ BrowserDialog.prototype.checkSearch = function (e) {
     var el = jq('#searchtext', document),
         len = el.val().length;
 
+    // Show the clear button when there is text in the search field
+    if (len > 0) {
+        jq('#clear-btn', document).show();
+    }
+    
     // Activate search when we have enough input and either livesearch is
     // enabled or the user explicitly pressed Enter.
     if (len >= 3 && (this.tinyMCEPopup.editor.settings.livesearch === true || e.which === 13)) {
@@ -589,6 +616,10 @@ BrowserDialog.prototype.checkSearch = function (e) {
         this.is_search_activated = false;
         el.val('');
         this.getCurrentFolderListing();
+    }
+    
+    if (len === 0 || e.which === 27) {
+        jq('#clear-btn', document).hide();
     }
 };
 
@@ -733,35 +764,35 @@ BrowserDialog.prototype.getFolderListing = function (context_url, method) {
                 col_items_number = self.editor.settings.num_of_thumb_columns;
 
             if (data.items.length === 0) {
-                html.push(self.labels.label_no_items);
+                html.push('<div id="no-items">' + self.labels.label_no_items + '</div>');
             } else {
                 jq.each(data.items, function (i, item) {
                     if (item.url === self.current_link && self.editor.settings.link_using_uids) {
                         self.current_link = 'resolveuid/' + item.uid;
                     }
-                    if (item.is_folderish) {
-                        folder_html.push('<div class="list item folderish ' + (i % 2 === 0 ? 'even' : 'odd') + '">');
-                        if (self.is_link_plugin === true) {
-                            jq.merge(folder_html, [
-                                '<input href="' + item.url + '" ',
-                                    'type="radio" class="noborder" style="margin: 0; width: 16px" name="internallink" value="',
-                                    'resolveuid/' + item.uid ,
-                                    '"/> '
-                            ]);
-                        } else {
-                            folder_html.push('<img src="img/arrow_right.png" />');
-                        }
-                        jq.merge(folder_html, [
-                                item.icon,
-                                '<a href="' + item.url + '" class="folderlink contenttype-' + item.normalized_type + '">',
-                                    item.title,
-                                '</a>',
-                            '</div>'
-                        ]);
-                    } else {
-                        switch (jq('#general_panel .legend .current', document).attr('id')) {
-                            // TODO: use jquery dom to be sure stuff is closed
-                            case 'listview':
+                    switch (jq('#general_panel .legend .current', document).attr('id')) {
+                        // TODO: use jquery dom to be sure stuff is closed
+                        case 'listview':
+                            if (item.is_folderish) {
+                                folder_html.push('<div class="list item folderish ' + (i % 2 === 0 ? 'even' : 'odd') + '">');
+                                if (self.is_link_plugin === true) {
+                                    jq.merge(folder_html, [
+                                        '<input href="' + item.url + '" ',
+                                            'type="radio" class="noborder" style="margin: 0; width: 16px" name="internallink" value="',
+                                            'resolveuid/' + item.uid ,
+                                            '"/> '
+                                    ]);
+                                } else {
+                                    folder_html.push('<img src="img/arrow_right.png" />');
+                                }
+                                jq.merge(folder_html, [
+                                        item.icon,
+                                        '<a href="' + item.url + '" class="folderlink contenttype-' + item.normalized_type + '">',
+                                            item.title,
+                                        '</a>',
+                                    '</div>'
+                                ]);
+                            } else {
                                 jq.merge(item_html, [
                                     '<div class="item list ' + (i % 2 === 0 ? 'even' : 'odd') + '" title="' + item.description + '">',
                                         '<input href="' + item.url + '" ',
@@ -772,14 +803,30 @@ BrowserDialog.prototype.getFolderListing = function (context_url, method) {
                                         '<span class="contenttype-' + item.normalized_type + '">' + item.title + '</span>',
                                     '</div>'
                                 ]);
-                                break;
-                            case 'thumbview':
-                                if (item_number % col_items_number === 0) {
-                                    item_html.push('<div class="row">');
-                                }
+                            }
+                            break;
+                        case 'thumbview':
+                            if (item_number % col_items_number === 0) {
+                                item_html.push('<div class="row">');
+                            }
+
+                            if (item.is_folderish) {
                                 jq.merge(item_html, [
                                     '<div class="width-1:' + col_items_number + ' cell position-' + item_number % col_items_number * (16 / col_items_number) + '">',
-                                        '<div class="thumbnail item ' + (i % 2 === 0 ? 'even' : 'odd') + '" title="' + item.description +  '">',
+                                        '<div class="thumbnail item folderish" title="' + item.description +  '">',
+                                            '<div style="width: ' + thumb_width + 'px; height: ' + thumb_height + 'px" class="thumb">',
+                                                '<img src="img/folder_big.png" alt="' + item.title + '" />',
+                                            '</div>',
+                                            '<a href="' + item.url + '">',
+                                                item.title,
+                                            '</a>',
+                                        '</div>',
+                                    '</div>'
+                                ]);
+                            } else {
+                                jq.merge(item_html, [
+                                    '<div class="width-1:' + col_items_number + ' cell position-' + item_number % col_items_number * (16 / col_items_number) + '">',
+                                        '<div class="thumbnail item" title="' + item.description +  '">',
                                             '<div style="width: ' + thumb_width + 'px; height: ' + thumb_height + 'px" class="thumb">',
                                                 '<img src="' + item.url + '/@@images/image/' + thumb_name + '" alt="' + item.title + '" />',
                                             '</div>',
@@ -791,13 +838,15 @@ BrowserDialog.prototype.getFolderListing = function (context_url, method) {
                                         '</div>',
                                     '</div>'
                                 ]);
-                                if (item_number % col_items_number === col_items_number - 1) {
-                                    item_html.push('</div>');
-                                }
-                                item_number++;
-                                break;
-                        }
+                            }
+                        
+                            if (item_number % col_items_number === col_items_number - 1) {
+                                item_html.push('</div>');
+                            }
+                            item_number++;
+                            break;
                     }
+                    
 
                 });
             }
@@ -807,28 +856,21 @@ BrowserDialog.prototype.getFolderListing = function (context_url, method) {
 
             // display shortcuts
             if (self.is_search_activated === false && self.shortcuts_html.length) {
-                html = [];
-                jq.merge(html, [
-                    '<div id="shortcuts" class="browser-separator">',
-                        '<img src="img/arrow_down.png" />',
-                        '<strong>' + self.labels.label_shortcuts + '</strong>',
-                    '</div>'
-                ]);
+                
+                jqShortcutsBtn = jq('#shortcutsicon', document);
+                jqShortcutsView = jq('#shortcutsview', document);
+                jqShortcutItem = jq('#shortcutsview #item-template', document);
+                
+                jqShortcutsBtn.attr('title', self.labels.label_shortcuts);
+                
                 jq.each(self.shortcuts_html, function () {
-                    html.push('<div class="item list shortcut">' + this + '</div>');
+                    jqItem = jqShortcutItem.clone();
+                    jqItem.append(''+this);
+                    jqItem.removeAttr('id');
+                    jqItem.appendTo(jqShortcutsView);
                 });
-                jq.merge(html, [
-                    '<div class="browser-separator">',
-                        '<img src="img/arrow_down.png" />',
-                        '<strong>' + self.labels.label_browser + '</strong>',
-                    '</div>'
-                ]);
-                jq('#internallinkcontainer', document).prepend(html.join(''));
+                jqShortcutItem.remove();
 
-                // Shortcuts listing can be hidden
-                jq('#shortcuts', document).click(function() {
-                    jq('#internallinkcontainer .shortcut', document).toggle();
-                });
             }
 
             // make rows clickable
@@ -851,7 +893,7 @@ BrowserDialog.prototype.getFolderListing = function (context_url, method) {
                 }
                 html.push(item.icon);
                 if (i === len - 1) {
-                    html.push(item.title);
+                    html.push('<span>' + item.title + '</span>');
                 } else {
                     html.push('<a href="' + item.url + '">' + item.title + '</a>');
                 }
@@ -859,7 +901,7 @@ BrowserDialog.prototype.getFolderListing = function (context_url, method) {
             jq('#internalpath', document).html(html.join(''));
 
             // folder link action
-            jq('#internallinkcontainer a, #internalpath a', document).click(function(e) {
+            jq('#internallinkcontainer a, #internalpath a, #shortcutsview a', document).click(function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 self.getFolderListing(jq(this).attr('href'), self.method_folderlisting);
@@ -975,26 +1017,23 @@ BrowserDialog.prototype.displayPanel = function(panel, upload_allowed) {
     // handle email panel
     if (panel === "email") {
         jq('#email_panel', document).removeClass('hide');
+        jq('#insert-selection', document).removeAttr('disabled');
     } else {
         jq('#email_panel', document).addClass('hide');
     }
     // handle anchor panel
     if (panel === "anchor") {
         jq('#anchor_panel', document).removeClass('hide');
+        jq('#insert-selection', document).removeAttr('disabled');
     } else {
         jq('#anchor_panel', document).addClass('hide');
     }
     // handle external panel
     if (panel === "external") {
         jq('#external_panel', document).removeClass('hide');
+        jq('#insert-selection', document).removeAttr('disabled');
     } else {
         jq('#external_panel', document).addClass('hide');
-    }
-    // handle advanced panel
-    if (panel === "advanced") {
-        jq('#advanced_panel', document).removeClass('hide');
-    } else {
-        jq('#advanced_panel', document).addClass('hide');
     }
     // show details panel, if an entry is selected and we
     // return from the advanced panel
@@ -1002,29 +1041,34 @@ BrowserDialog.prototype.displayPanel = function(panel, upload_allowed) {
     if ((checkedlink.length === 1) && (panel === "browse")) {
       this.setDetails(jq(checkedlink).attr('value'));
     }
+    
+    // handle browse panel
+    if (jq.inArray(panel, ["search", "details", "browse", "upload"]) > -1) {
+        if (jq.inArray(panel, ["upload", "details"]) > -1) {
+            jq('#browseimage_panel #general_panel', document).removeClass('width-full').addClass('width-3:4');
+        } else {
+            jq('#browseimage_panel #general_panel', document).removeClass('width-3:4').addClass('width-full');;
+        }
+        jq('#browseimage_panel', document).removeClass('hide').addClass('row');
+        jq('#insert-selection', document).attr('disabled','disabled');
+        jq('#upload-button', document).removeClass('hide');
+    } else {
+        jq('#browseimage_panel', document).removeClass('row').addClass('hide');
+        jq('#upload-button', document).addClass('hide');
+    }
+    
     // handle details/preview panel
     if (panel === 'details') {
-        jq('#details_panel', document).removeClass("hide");
+        jq('#details_panel', document).removeClass('hide');
+        jq('#insert-selection', document).removeAttr('disabled');
     } else {
-        jq('#details_panel', document).addClass("hide");
+        jq('#details_panel', document).addClass('hide');
     }
     // handle upload panel
     if (panel === "upload") {
         jq('#addimage_panel', document).removeClass('hide');
     } else {
         jq('#addimage_panel', document).addClass('hide');
-    }
-    // handle browse panel
-    if (jq.inArray(panel, ["search", "details", "browse", "upload"]) > -1) {
-        correction_length = this.is_link_plugin ? 150 : 0;
-        if (jq.inArray(panel, ["upload", "details"]) > -1) {
-            jq('#browseimage_panel', document).width(545 - correction_length);
-        } else {
-            jq('#browseimage_panel', document).width(780 - correction_length);
-        }
-        jq('#browseimage_panel', document).removeClass("hide");
-    } else {
-        jq('#browseimage_panel', document).addClass("hide");
     }
 };
 
