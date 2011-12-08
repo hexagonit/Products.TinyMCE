@@ -436,7 +436,7 @@ class ITinyMCEContentBrowser(Interface):
     )
 
     enable_external_link_preview = schema.Bool(
-        title=_("Enable/Disable external link preview"),
+        title=_("External link preview"),
         description=_(u"Modern browsers allow webpages to block such feature. Some webpages may not be displayed in the preview."),
         default=True,
     )
