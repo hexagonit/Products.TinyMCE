@@ -1,6 +1,6 @@
 include *.txt
-graft Products *
-graft docs *
+graft Products
+graft docs
 prune Products/TinyMCE/tests
 prune Products/TinyMCE/utils/xml
 global-exclude *pyc
