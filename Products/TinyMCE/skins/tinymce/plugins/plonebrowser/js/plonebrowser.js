@@ -119,7 +119,7 @@ BrowserDialog.prototype.init = function () {
         jq(this).toggleClass('selected');
         jq('#shortcutsview', document).toggle();
     });
-    
+
     // handle different folder listing view types
     jq('#general_panel .legend a', document).click(function (e) {
         self.editing_existing_image = true;
@@ -602,7 +602,7 @@ BrowserDialog.prototype.checkSearch = function (e) {
     if (len > 0) {
         jq('#clear-btn', document).show();
     }
-    
+
     // Activate search when we have enough input and either livesearch is
     // enabled or the user explicitly pressed Enter.
     if (len >= 3 && (this.tinyMCEPopup.editor.settings.livesearch === true || e.which === 13)) {
@@ -617,7 +617,7 @@ BrowserDialog.prototype.checkSearch = function (e) {
         el.val('');
         this.getCurrentFolderListing();
     }
-    
+
     if (len === 0 || e.which === 27) {
         jq('#clear-btn', document).hide();
     }
@@ -839,14 +839,14 @@ BrowserDialog.prototype.getFolderListing = function (context_url, method) {
                                     '</div>'
                                 ]);
                             }
-                        
+
                             if (item_number % col_items_number === col_items_number - 1) {
                                 item_html.push('</div>');
                             }
                             item_number++;
                             break;
                     }
-                    
+
 
                 });
             }
@@ -856,13 +856,13 @@ BrowserDialog.prototype.getFolderListing = function (context_url, method) {
 
             // display shortcuts
             if (self.is_search_activated === false && self.shortcuts_html.length) {
-                
+
                 jqShortcutsBtn = jq('#shortcutsicon', document);
                 jqShortcutsView = jq('#shortcutsview', document);
                 jqShortcutItem = jq('#shortcutsview #item-template', document);
-                
+
                 jqShortcutsBtn.attr('title', self.labels.label_shortcuts);
-                
+
                 jq.each(self.shortcuts_html, function () {
                     jqItem = jqShortcutItem.clone();
                     jqItem.append(''+this);
@@ -1041,7 +1041,7 @@ BrowserDialog.prototype.displayPanel = function(panel, upload_allowed) {
     if ((checkedlink.length === 1) && (panel === "browse")) {
       this.setDetails(jq(checkedlink).attr('value'));
     }
-    
+
     // handle browse panel
     if (jq.inArray(panel, ["search", "details", "browse", "upload"]) > -1) {
         if (jq.inArray(panel, ["upload", "details"]) > -1) {
@@ -1056,7 +1056,7 @@ BrowserDialog.prototype.displayPanel = function(panel, upload_allowed) {
         jq('#browseimage_panel', document).removeClass('row').addClass('hide');
         jq('#upload-button', document).addClass('hide');
     }
-    
+
     // handle details/preview panel
     if (panel === 'details') {
         jq('#details_panel', document).removeClass('hide');
