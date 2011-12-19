@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: plone.tinymce\n"
-"POT-Creation-Date: 2011-12-19 15:23+0000\n"
+"POT-Creation-Date: 2011-12-19 15:52+0000\n"
 "PO-Revision-Date: 2010-08-28 18:30+0100\n"
 "Last-Translator: Radim Novotny <novotny.radim@gmail.com>\n"
 "Language-Team: DMS4U <info@dms4u.cz>\n"
@@ -561,6 +561,10 @@ msgstr ""
 
 #: ../utility.py:752
 msgid "Search results:"
+msgstr ""
+
+#: ../skins/tinymce/plugins/plonebrowser/plonebrowser.htm.pt:42
+msgid "Search site"
 msgstr ""
 
 #: ../interfaces/utility.py:119

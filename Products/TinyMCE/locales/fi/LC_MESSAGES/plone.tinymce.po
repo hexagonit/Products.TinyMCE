@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: plone.tinymce\n"
-"POT-Creation-Date: 2011-12-19 15:23+0000\n"
+"POT-Creation-Date: 2011-12-19 15:52+0000\n"
 "PO-Revision-Date: 2010-08-29 14:07+0200\n"
 "Last-Translator: Jukka Ojaniemi <jukka.ojaniemi@jyu.fi>\n"
 "Language-Team: JYU <LL@li.org>\n"
@@ -564,6 +564,10 @@ msgstr ""
 
 #: ../utility.py:752
 msgid "Search results:"
+msgstr ""
+
+#: ../skins/tinymce/plugins/plonebrowser/plonebrowser.htm.pt:42
+msgid "Search site"
 msgstr ""
 
 #: ../interfaces/utility.py:119

@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TinyMCE\n"
-"POT-Creation-Date: 2011-12-19 15:23+0000\n"
+"POT-Creation-Date: 2011-12-19 15:52+0000\n"
 "PO-Revision-Date: 2010-09-03 18:03+0800\n"
 "Last-Translator: TsungWei Hu <marr.tw@gmail.com>\n"
 "Language-Team: Plone i18n <plone-i18n@lists.sourceforge.net>\n"
@@ -560,6 +560,10 @@ msgstr ""
 
 #: ../utility.py:752
 msgid "Search results:"
+msgstr ""
+
+#: ../skins/tinymce/plugins/plonebrowser/plonebrowser.htm.pt:42
+msgid "Search site"
 msgstr ""
 
 #: ../interfaces/utility.py:119
