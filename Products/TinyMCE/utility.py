@@ -483,8 +483,7 @@ class TinyMCE(SimpleItem):
             'ol': COMMON_ATTRS | set('compact type'.split()),
             'optgroup': COMMON_ATTRS | set('disabled label'.split()),
             'option': COMMON_ATTRS | set('selected disabled label value'.split()),
-            # p needs to be prepended with # to allow empty p tags http://www.tinymce.com/wiki.php/Configuration:valid_elements
-            '#p': COMMON_ATTRS | set('align'.split()),
+            'p': COMMON_ATTRS | set('align'.split()),
             'param': set('id name value valuetype type'.split()),
             'pre': COMMON_ATTRS | set('width'.split()),
             'q': COMMON_ATTRS | set('cite'.split()),
@@ -579,6 +578,8 @@ class TinyMCE(SimpleItem):
         for valid_element in valid_elements.keys():
             valid_elements[valid_element] = sorted(valid_elements[valid_element])
 
+        # p needs to be prepended with # to allow empty p tags http://www.tinymce.com/wiki.php/Configuration:valid_elements
+        valid_elements['#p'] = valid_elements.pop('p')
         return valid_elements
 
     security.declarePrivate('getPlugins')
@@ -949,7 +950,6 @@ class TinyMCE(SimpleItem):
         results['body_class'] = "documentContent"
         results['body_id'] = "content"
         results['table_firstline_th'] = True
-        results['force_span_wrappers'] = True
         results['fix_list_elements'] = False
         results['theme_advanced_path'] = False
         results['theme_advanced_toolbar_align'] = "left"
