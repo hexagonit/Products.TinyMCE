@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plone.tinymce\n"
 "POT-Creation-Date: 2011-12-19 15:52+0000\n"
-"PO-Revision-Date: 2011-12-22 16:03+0200\n"
+"PO-Revision-Date: 2012-01-10 17:15+0200\n"
 "Last-Translator: Tanja <tanja.sormunen@hexagonit.fi>\n"
 "Language-Team: JYU <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -34,7 +34,7 @@ msgstr "Lisää uusi kuva"
 
 #: ../interfaces/utility.py:308
 msgid "After the deadline (FLOSS)"
-msgstr "Määräajan jälkeen (FLOSS)"
+msgstr "After the Deadline (FLOSS)"
 
 #: ../interfaces/utility.py:159
 msgid "Align center"
@@ -156,7 +156,7 @@ msgstr "Määriteltävän termin kuvaus"
 
 #: ../interfaces/utility.py:179
 msgid "Definition list"
-msgstr "Määritelmälista"
+msgstr "Määritelmäluettelo"
 
 msgid "Definition term"
 msgstr "Määriteltävä termi"
@@ -328,11 +328,11 @@ msgstr "Avoin"
 
 #: ../interfaces/utility.py:223
 msgid "Insert advanced horizontal ruler"
-msgstr "Lisää edistyneempi vaakasuora viivoitin"
+msgstr "Lisää muokattava vaakasuora viiva"
 
 #: ../interfaces/utility.py:215
 msgid "Insert custom character"
-msgstr "Lisää merkki"
+msgstr "Lisää erikoismerkki"
 
 #: ../interfaces/utility.py:227
 msgid "Insert date"
@@ -340,7 +340,7 @@ msgstr "Lisää päivämäärä"
 
 #: ../interfaces/utility.py:219
 msgid "Insert horizontal ruler"
-msgstr "Lisää vaakasuora viivoitin"
+msgstr "Lisää vaakasuora viiva"
 
 #: ../interfaces/utility.py:239
 msgid "Insert non-breaking space character"
@@ -446,7 +446,7 @@ msgstr "Pienet roomalaiset numerot"
 
 #: ../interfaces/utility.py:440
 msgid "Modern browsers allow webpages to block such feature. Some webpages may not be displayed in the preview."
-msgstr "Nykyaikaiset selaimet sallivat sivustojen estävän kyseisen ominaisuuden. Osa web-sivuista ei mahdollisesti näy esikatselussa"
+msgstr "Nykyaikaiset selaimet sallivat sivustojen estävän kyseisen ominaisuuden. Osa web-sivuista ei mahdollisesti näy esikatselussa."
 
 #: ../interfaces/utility.py:401
 msgid "Named"
@@ -484,7 +484,7 @@ msgstr "Pariton rivi"
 
 #: ../interfaces/utility.py:175
 msgid "Ordered list"
-msgstr "Numeroitu lista"
+msgstr "Järjestetty lista"
 
 #: ../utility.py:188
 msgid "Original"
@@ -511,7 +511,7 @@ msgstr "Liitä Wordistä"
 
 #: ../interfaces/utility.py:74
 msgid "Place toolbar on top of the page"
-msgstr "Aseta työkalurivi sivun ylälaitaan"
+msgstr "Aseta työkalupalkki sivun ylälaitaan"
 
 #: ../utility.py:741
 msgid "Plain cell"
@@ -655,7 +655,7 @@ msgstr "Tällä valinnalla kontrolloidaan miten entiteettejä/merkkejä prosesso
 
 #: ../interfaces/utility.py:75
 msgid "This option enables the external toolbar which will be placed at the top of the page."
-msgstr "Tämä valinta näyttää ulkoisen työkalupalkin, joka sijoittu sivun ylälaitaan."
+msgstr "Tämä valinta kytkee näkyviin ulkoisen työkalupalkin, joka sijoittuu sivun ylälaitaan."
 
 #: ../interfaces/utility.py:51
 msgid "This option enables you to specify a custom CSS file that replaces the theme content CSS. This CSS file is the one used within the editor (the editable area)."
@@ -683,7 +683,7 @@ msgstr "Tämä valinta mahdollistaa editorin leveyden määrittämisen (kuten 10
 
 #: ../interfaces/utility.py:70
 msgid "This option gives you the ability to specify the width of the toolbar in pixels."
-msgstr "Tämä valinta mahdollistaa työkalupalkin leveyden määrittämisen pikseleinä."
+msgstr "Tässä voit määritellä työkalurivin leveyden pikseleinä."
 
 #: ../interfaces/utility.py:425
 msgid "Thumbnail size in thumbnails mode"
@@ -711,7 +711,7 @@ msgstr "Otsikko"
 
 #: ../interfaces/utility.py:283
 msgid "Toggle fullscreen mode"
-msgstr "Täysi näyttö"
+msgstr "Kokoruututila"
 
 #: ../interfaces/utility.py:267
 msgid "Toggle guidelines/invisible objects"
@@ -785,7 +785,7 @@ msgstr "Syötä lista kustomoiduista lisäosista jotka ladataan editoriin. Yksi 
 
 #: ../interfaces/utility.py:306
 msgid "ieSpell (free for personal use)"
-msgstr "ieSpell (vapaasti henkilökohtaiseen käyttöön)"
+msgstr "ieSpell (ilmainen ei-kaupalliseen käyttöön)"
 
 #. Default: "A list of strings which the \"After the Deadline\"spellchecker should ignore. Note: This option is only applicable when the appropriate spellchecker has been chosen above."
 #: ../interfaces/utility.py:315
