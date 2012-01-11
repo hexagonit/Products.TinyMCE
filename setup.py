@@ -3,7 +3,7 @@ import os
 import sys
 
 
-version = '1.3-beta4'
+version = '1.3-beta5'
 open_relative = lambda *x: open(os.path.join(os.path.dirname(__file__), *x)).read()
 
 if sys.version_info[0] == 2 and sys.version_info[1] < 6:
